@@ -1,0 +1,6 @@
+# IDE's state files
+.idea
+
+# AOC's creator ask people to not pulish the input of their puzzle
+input.txt
+input
