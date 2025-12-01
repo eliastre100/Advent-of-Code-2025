@@ -2,8 +2,6 @@ package _1
 
 import (
 	"math"
-
-	"github.com/charmbracelet/log"
 )
 
 type Dial struct {
@@ -26,7 +24,6 @@ func (d *Dial) Turn(direction Direction, steps int) int {
 
 	initialPosition := d.Position
 	expectedPosition := d.Position + steps
-	log.Debug("Turning the dial", "steps", steps, "expected", expectedPosition)
 
 	if expectedPosition > 0 {
 		d.Position = expectedPosition % 100
