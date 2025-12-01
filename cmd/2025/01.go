@@ -15,6 +15,7 @@ var D01Cmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Debugf("Solving day 01/2025 with input file %s", cmd.Flag("input").Value)
 
+		method := cmd.Flag("method").Value.String() == "0x434C49434B"
 		dial := _1.Dial{Position: 50}
 		count := 0
 
@@ -32,11 +33,17 @@ var D01Cmd = &cobra.Command{
 				log.Fatal("The step number is invalid", "steps", line[1:len(line)], "error", err)
 			}
 			log.Debug("Moving the dial", "direction", direction, "steps", steps)
-			dial.Turn(direction, steps)
-			if dial.Position == 0 {
-				count += 1
+			crossed := dial.Turn(direction, steps)
+			log.Debug("Dial landed", "position", dial.Position, "crossed", crossed)
+			if method {
+				count += crossed
+			} else {
+				if dial.Position == 0 {
+					count += 1
+				}
 			}
 			log.Debug("Dial moved", "position", dial.Position)
+			log.Debug("")
 			return nil
 		}); err != nil {
 			log.Fatal(err)
@@ -48,6 +55,7 @@ var D01Cmd = &cobra.Command{
 
 func init() {
 	D01Cmd.Flags().StringP("input", "i", "", "Path to the input file")
+	D01Cmd.Flags().String("method", "0x434C49434C", "Password method to use")
 
 	D01Cmd.MarkFlagRequired("input")
 	D01Cmd.MarkFlagFilename("input")
