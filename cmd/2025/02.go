@@ -25,7 +25,7 @@ var D02Cmd = &cobra.Command{
 					invalidValuesSum += v
 				}
 			}
-			log.Debugf("Range: %+v have invalid values %+v", r, _2.InvalidValuesInRange(r))
+			log.Debugf("Range: %+v have invalid values %+v", r, invalidValues)
 		}
 
 		log.Infof("The sum of invalid values is %d", invalidValuesSum)
