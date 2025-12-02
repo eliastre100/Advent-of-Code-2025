@@ -12,24 +12,33 @@ var D02Cmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Debugf("Solving day 02/2025 with input file %s", cmd.Flag("input").Value)
 
-		invalidValuesSum := 0
+		invalidDuplicate := 0
+		invalidRepeated := 0
 		ranges, err := _2.Parse(cmd.Flag("input").Value.String())
 		if err != nil {
 			log.Fatal("Unable to parse input file", "err", err)
 		}
 
 		for _, r := range ranges {
-			invalidValues := _2.InvalidValuesInRange(r)
-			if len(invalidValues) > 0 {
-				for _, v := range invalidValues {
-					invalidValuesSum += v
-				}
-			}
-			log.Debugf("Range: %+v have invalid values %+v", r, invalidValues)
+			invalidDuplicate += invalidSum(r, _2.NotDuplicate, "DUPLICATE")
+			invalidRepeated += invalidSum(r, _2.NotRepeating, "REPEATED")
 		}
 
-		log.Infof("The sum of invalid values is %d", invalidValuesSum)
+		log.Infof("The sum of invalid values by duplication is %d and %d by repetition", invalidDuplicate, invalidRepeated)
 	},
+}
+
+func invalidSum(r _2.Range, validator _2.Validator, scope string) int {
+	sum := 0
+	invalidValues := _2.InvalidValuesInRange(r, _2.NotDuplicate)
+
+	if len(invalidValues) > 0 {
+		log.Debugf("[%s] Range: %+v have invalid values %+v", scope, r, invalidValues)
+		for _, v := range invalidValues {
+			sum += v
+		}
+	}
+	return sum
 }
 
 func init() {

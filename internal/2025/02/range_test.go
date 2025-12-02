@@ -5,7 +5,28 @@ import (
 	"testing"
 )
 
-func TestIsValid(t *testing.T) {
+func TestNotDuplicate(t *testing.T) {
+	tests := []struct {
+		Value    int
+		Expected bool
+	}{
+		{Value: 0, Expected: true},
+		{Value: 1, Expected: true},
+		{Value: 11, Expected: false},
+		{Value: 123123, Expected: false},
+		{Value: 1231234, Expected: true},
+		{Value: 12351234, Expected: true},
+	}
+
+	for _, test := range tests {
+		result := NotDuplicate(test.Value)
+		if result != test.Expected {
+			t.Errorf("Expected %t for %d, got %t", test.Expected, test.Value, result)
+		}
+	}
+}
+
+func TestNotRepeating(t *testing.T) {
 	tests := []struct {
 		Value    int
 		Expected bool
@@ -17,8 +38,8 @@ func TestIsValid(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		if isValid(test.Value) != test.Expected {
-			t.Errorf("[%d] Expected %t, got %t", i+1, test.Expected, isValid(test.Value))
+		if NotRepeating(test.Value) != test.Expected {
+			t.Errorf("[%d] Expected %t, got %t", i+1, test.Expected, NotRepeating(test.Value))
 		}
 	}
 }

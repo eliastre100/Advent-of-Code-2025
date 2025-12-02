@@ -10,18 +10,26 @@ type Range struct {
 	End   int
 }
 
-func InvalidValuesInRange(r Range) []int {
+type Validator func(i int) bool
+
+func InvalidValuesInRange(r Range, validator Validator) []int {
 	var values []int
 
 	for i := r.Start; i <= r.End; i++ {
-		if !isValid(i) {
+		if !validator(i) {
 			values = append(values, i)
 		}
 	}
 	return values
 }
 
-func isValid(i int) bool {
+func NotDuplicate(i int) bool {
+	str := strconv.Itoa(i)
+	build := strings.Repeat(str[:len(str)/2], 2)
+	return build != str
+}
+
+func NotRepeating(i int) bool {
 	str := strconv.Itoa(i)
 	starts := patternStarts(strconv.Itoa(i), string(str[0]))
 
