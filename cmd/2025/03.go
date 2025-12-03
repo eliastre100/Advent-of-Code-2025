@@ -17,14 +17,18 @@ var D03Cmd = &cobra.Command{
 			log.Fatal("Failed to parse batteries: ", err)
 		}
 
-		power := 0
+		powerOf2 := 0
+		powerOf12 := 0
 		for i, bat := range batteries {
-			batteryPower := _3.MaxBatteryJoltage(bat)
-			log.Debugf("Power of %d for Battery %d", batteryPower, i)
-			power += batteryPower
+			batteryPowerOf2 := _3.MaxBatteryJoltage(bat, 2)
+			batteryPowerOf12 := _3.MaxBatteryJoltage(bat, 12)
+
+			log.Debugf("Power of 2(%d) and 12(%d) for Battery %d", batteryPowerOf2, batteryPowerOf12, i)
+			powerOf2 += batteryPowerOf2
+			powerOf12 += batteryPowerOf12
 		}
 
-		log.Infof("The total output Joltage is %d", power)
+		log.Infof("The total output Joltage is 2(%d) and 12(%d)", powerOf2, powerOf12)
 	},
 }
 
