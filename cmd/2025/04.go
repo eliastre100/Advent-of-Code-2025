@@ -18,12 +18,15 @@ var D04Cmd = &cobra.Command{
 		}
 
 		accessibleRollCount := 0
-		for x := range m.Width {
-			for y := range m.Height {
-				if m.RollPositions[y][x] && _4.RollAccessible(m, x, y) {
-					accessibleRollCount++
-				}
+		for {
+			log.Debugf("MAP:\n")
+			print(m.String())
+			removedRolls := m.Cleanup()
+			log.Debugf("Removed %d rolls", removedRolls)
+			if removedRolls == 0 {
+				break
 			}
+			accessibleRollCount += removedRolls
 		}
 
 		log.Infof("Number of accessible rolls: %d", accessibleRollCount)
