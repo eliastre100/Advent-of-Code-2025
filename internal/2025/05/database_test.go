@@ -1,6 +1,10 @@
 package _5
 
-import "testing"
+import (
+	"reflect"
+	"slices"
+	"testing"
+)
 
 func TestDatabase_IsFresh(t *testing.T) {
 	tests := []struct {
@@ -20,6 +24,27 @@ func TestDatabase_IsFresh(t *testing.T) {
 		fresh := db.IsFresh(test.Ingredient)
 		if fresh != test.Expected {
 			t.Errorf("Expected %t for %d in %+v, got %t", test.Expected, test.Ingredient, test.Range, fresh)
+		}
+	}
+}
+
+func TestDatabase_ExportFreshIds(t *testing.T) {
+	tests := []struct {
+		Ranges   []Range
+		Expected []Ingredient
+	}{
+		{Ranges: []Range{Range{10, 15}, Range{20, 25}}, Expected: []Ingredient{10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 24, 25}},
+	}
+
+	for _, test := range tests {
+		var db Database
+		for _, r := range test.Ranges {
+			db.Insert(r)
+		}
+		result := db.ExportFreshIds()
+		slices.Sort(result)
+		if !reflect.DeepEqual(result, test.Expected) {
+			t.Errorf("Expected %+v, got %+v", test.Expected, result)
 		}
 	}
 }

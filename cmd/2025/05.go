@@ -23,8 +23,9 @@ var D05Cmd = &cobra.Command{
 				freshCount += 1
 			}
 		}
+		freshIdsCount := _5.Count(*db)
 
-		log.Infof("There are %d ingredients that are still fresh", freshCount)
+		log.Infof("There are %d ingredients that are still fresh out of the %d valid fresh ids", freshCount, freshIdsCount)
 	},
 }
 
