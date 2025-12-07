@@ -17,9 +17,8 @@ var D07Cmd = &cobra.Command{
 			log.Fatal("Unable to parse input diagram", "err", err)
 		}
 
-		splitCount := diagram.Simulate()
-
-		log.Infof("A simulation splits the beam %d times", splitCount)
+		splitCount, timelines := diagram.SplitCount()
+		log.Infof("A simulation splits the beam %d times and have %d timelines", splitCount, timelines)
 	},
 }
 

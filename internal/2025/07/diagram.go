@@ -2,7 +2,6 @@ package _7
 
 import (
 	"slices"
-	"sort"
 )
 
 type Position struct {
@@ -21,25 +20,29 @@ func NewDiagram() *Diagram {
 	return &Diagram{Splitters: map[int][]int{}}
 }
 
-func (d *Diagram) Simulate() int {
-	beams := []int{d.Start.X}
+func (d *Diagram) SplitCount() (int, int) {
+	beams := map[int]int{d.Start.X: 1}
 	splitCount := 0
 
 	for y := d.Start.Y; y < d.Height; y++ {
-		var nextBeams []int
+		nextBeams := map[int]int{}
 
-		for _, beam := range beams {
+		for beam, count := range beams {
 			if slices.Contains(d.Splitters[y], beam) {
 				splitCount += 1
-				nextBeams = append(nextBeams, beam+1, beam-1)
+				nextBeams[beam+1] = nextBeams[beam+1] + count
+				nextBeams[beam-1] = nextBeams[beam-1] + count
 			} else {
-				nextBeams = append(nextBeams, beam)
+				nextBeams[beam] = nextBeams[beam] + count
 			}
 		}
 
-		sort.Ints(nextBeams)
-		beams = slices.Compact(nextBeams)
+		beams = nextBeams
 	}
 
-	return splitCount
+	timelines := 0
+	for _, count := range beams {
+		timelines += count
+	}
+	return splitCount, timelines
 }
