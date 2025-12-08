@@ -5,6 +5,7 @@ import (
 	"math"
 	"slices"
 
+	"github.com/charmbracelet/log"
 	"github.com/eliastre100/Advent-of-Code-2025/pkg/utils"
 )
 
@@ -58,4 +59,31 @@ func LinkJunctionBoxes(boxes []*JunctionBox, threshold int) {
 			break
 		}
 	}
+}
+
+func LinkAllJunctionBoxes(boxes []*JunctionBox) Link {
+	links := GenerateLinks(boxes)
+	slices.SortFunc(links, func(a, b Link) int {
+		return a.Distance - b.Distance
+	})
+	remaining := make([]*Circuit, len(boxes))
+	for i, circuit := range boxes {
+		remaining[i] = circuit.Circuit
+	}
+
+	for _, link := range links {
+		if link.A.Circuit != link.B.Circuit {
+			remaining = slices.DeleteFunc(remaining, func(circuit *Circuit) bool {
+				return link.B.Circuit == circuit
+			})
+			linkBoxes(link.A.Circuit, link.B.Circuit)
+			log.Debug("Removed a circuit", "rem", len(remaining))
+		}
+
+		if len(remaining) == 1 {
+			return link
+		}
+	}
+
+	return Link{}
 }
