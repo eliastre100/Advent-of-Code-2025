@@ -18,4 +18,5 @@ func init() {
 	Year2025Cmd.AddCommand(D06Cmd)
 	Year2025Cmd.AddCommand(D07Cmd)
 	Year2025Cmd.AddCommand(D08Cmd)
+	Year2025Cmd.AddCommand(D09Cmd)
 }
